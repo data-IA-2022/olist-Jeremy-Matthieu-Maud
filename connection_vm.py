@@ -14,7 +14,7 @@ ssh.connect(hostname='gretap2-mjm.francecentral.cloudapp.azure.com', username='g
 # Paramètres de connexion à la base de données à distance
 host_dist = 'localhost'
 port_dist = 5432
-dbname_dist = 'olist'
+dbname_dist = 'postres'
 user_dist = 'postgres'
 password_dist = 'greta2023'
 
@@ -24,7 +24,7 @@ files=['olist_customers_dataset', 'olist_geolocation_dataset', 'olist_order_item
 
 
 # Connexion à la base de données
-conn_str_dist = f"postgresql+psycopg2://{user_dist}:{password_dist}@{host_dist}:{port_dist}/{dbname_dist}"
+conn_str_dist = f"postgresql://{user_dist}:{password_dist}@{host_dist}:{port_dist}/{dbname_dist}"
 
 
  
