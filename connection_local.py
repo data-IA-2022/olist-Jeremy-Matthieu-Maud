@@ -1,4 +1,5 @@
-import psycopg2
+import pg8000
+#import psycopg2
 import pandas as pd
 from sqlalchemy import create_engine
 
@@ -31,7 +32,6 @@ try:
     print("===========================================================================================")
 
     for name in files:
-        print("-------------------------------------------------------------------------------------------")
         print(f"| Chargement {name}")
         df = pd.read_csv(f"/home/mikaleff/Bureau/Brazilian_ecommerce/{name}.csv", sep=',')
         print(f"| {df.shape} ")
