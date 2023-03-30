@@ -12,7 +12,7 @@ files=['olist_customers_dataset', 'olist_geolocation_dataset', 'olist_order_item
 
 # Paramètres de connexion à la base de données local
 host_local = 'localhost'
-port_local = 32768
+port_local = 32770
 dbname_local = 'postgres'
 user_local = 'postgres'
 password_local = 'postgrespw'
@@ -37,7 +37,7 @@ try:
         print(f"| {df.shape} ")
         print("-------------------------------------------------------------------------------------------")
 
-        df.to_sql(name.replace('.', '_'), engine_local, if_exists='replace', index=False) # , index=False
+        df.to_sql(name.replace('.', '_'), engine_local, if_exists='replace', index=False)
 
 
     # Fermeture de la connexion
