@@ -6,7 +6,7 @@ import paramiko
 
 # Environnement : source env_ecommerce/bin/activate
 # Tunnel ssh : ssh -L 5432:localhost:5432 greta@gretap2-mjm.francecentral.cloudapp.azure.com / MDP : @greta*2023!
-# Tunnel ssh : ssh -L 5432:172.17.0.2:5432 greta@gretap2-mjm.francecentral.cloudapp.azure.com
+# Double tunnel ssh : ssh -L 25432:localhost:5432 -L 3001:localhost:3000 greta@gretap2-mjm.francecentral.cloudapp.azure.com
 
 ssh = paramiko.SSHClient()
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
