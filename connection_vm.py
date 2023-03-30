@@ -43,7 +43,7 @@ try:
         print(f"| {df.shape} ")
         print("-------------------------------------------------------------------------------------------")
 
-        df.to_sql(name.replace('.', '_'), engine_dist, if_exists='replace') # , index=False
+        df.to_sql(name.replace('.', '_'), engine_dist, if_exists='replace', index=False) # , index=False
 
 
     # Fermeture de la connexion
