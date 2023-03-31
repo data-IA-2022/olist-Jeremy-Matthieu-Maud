@@ -19,7 +19,7 @@ files=['olist_customers_dataset', 'olist_geolocation_dataset', 'olist_order_item
 # Paramètres de connexion à la base de données distance
 host_dist = 'localhost'
 port_dist = 5432
-dbname_dist = 'postgres'
+dbname_dist = 'olist_brazilian_ecommerce'
 user_dist = 'postgres'
 password_dist = 'greta2023'
 
