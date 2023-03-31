@@ -25,8 +25,8 @@ try:
     print("|                                   Connexion réussie !                                   |")
     print("===========================================================================================")
 
-    query=text("SELECT * FROM product_category_name_translation")
-    df = pd.read_sql_query(query , conn_local)
+    name="product_category_name_translation"
+    df = pd.read_csv(f"/home/mikaleff/Bureau/Brazilian_ecommerce/{name}.csv", sep=',')
 
     # Fonction de traduction
     def translate_category_name(name, target_lang="fr"):
@@ -46,8 +46,6 @@ try:
     # Upload des données
     training_time=0
     start_time = time.time()
-
-    name="product_category_name_translation"
 
     df.to_sql(name, engine_local, if_exists='replace', index=False)
 
