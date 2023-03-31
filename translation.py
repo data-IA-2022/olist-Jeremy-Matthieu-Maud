@@ -1,11 +1,11 @@
 import pandas as pd
 import time
 from deep_translator import GoogleTranslator
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, text, MetaData
 
 # Paramètres de connexion à la base de données local
 host_local = 'localhost'
-port_local = 32770
+port_local = 32768
 dbname_local = 'postgres'
 user_local = 'postgres'
 password_local = 'postgrespw'
@@ -43,23 +43,20 @@ try:
     training_time = end_time - start_time
     print(f"\n------------------------------------------------------- Traduction fini => {training_time:.2f} seconds")
 
-    # Création d'un csv
-    training_time=0
-    start_time = time.time()
-
-    df.to_csv('product_category_name_translation_desktop.csv', index = False)
-
-    end_time = time.time()
-    training_time = end_time - start_time
-    print(f"\n------------------------------------------------------- Csv fini => {training_time:.2f} seconds")
-
     # Upload des données
     training_time=0
     start_time = time.time()
 
-    name='product_category_name_translation'
-    df_transition = pd.read_csv(f"/home/mikaleff/Bureau/Brazilian_ecommerce/olist-Jeremy-Matthieu-Maud/product_category_name_translation_desktop.csv", sep=',')
-    df_transition.to_sql(name, engine_local, if_exists='replace', index=False)
+    metadata = MetaData()
+    metadata.reflect(bind=engine_local)
+    
+    name="product_category_name_translation"
+    table = metadata.tables.get(name)
+
+    if table is not None:
+        conn_local.execute(f"DROP TABLE IF EXISTS {name} CASCADE")
+
+    df.to_sql(name, engine_local, if_exists='replace', index=False)
 
     end_time = time.time()
     training_time = end_time - start_time

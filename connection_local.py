@@ -12,7 +12,7 @@ files=['olist_customers_dataset', 'olist_geolocation_dataset', 'olist_order_item
 
 # Paramètres de connexion à la base de données local
 host_local = 'localhost'
-port_local = 32770
+port_local = 32768
 dbname_local = 'postgres'
 user_local = 'postgres'
 password_local = 'postgrespw'
