@@ -47,14 +47,7 @@ try:
     training_time=0
     start_time = time.time()
 
-    metadata = MetaData()
-    metadata.reflect(bind=engine_local)
-    
     name="product_category_name_translation"
-    table = metadata.tables.get(name)
-
-    if table is not None:
-        conn_local.execute(f"DROP TABLE IF EXISTS {name} CASCADE")
 
     df.to_sql(name, engine_local, if_exists='replace', index=False)
 
