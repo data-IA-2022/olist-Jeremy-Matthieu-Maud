@@ -6,7 +6,7 @@ from sqlalchemy import create_engine, text, MetaData
 # Paramètres de connexion à la base de données local
 host_dist = 'localhost'
 port_dist = 5432
-dbname_dist = 'olist_brazilian_ecommerce'
+dbname_dist = 'postgres'
 user_dist = 'postgres'
 password_dist = 'greta2023'
 
