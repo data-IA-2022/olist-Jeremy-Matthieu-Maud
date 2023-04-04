@@ -1,21 +1,5 @@
 import psycopg2
-
-# Connexion à la base de données PostgreSQL
-conn = psycopg2.connect(
-    host="localhost",
-    database="postgres",
-    user="postgres",
-    password="greta2023"
-)
-
-# Création d'un curseur pour exécuter des requêtes SQL
-cursor = conn.cursor()
-
-# Exemple : Exécuter une requête SQL pour afficher le contenu de la table "mytable"
-cursor.execute("SELECT * FROM olist_customers_dataset")
-rows = cursor.fetchall()
-for row in rows:
-    print(row)
-
-# Fermeture de la connexion à la base de données PostgreSQL
-conn.close()
+import csv
+import pandas as pd
+data= pd.read_csv("/home/matthieu/Formation_IA/Briefs/olist-Jeremy-Matthieu-Maud/archive/product_category_name_translation.csv")
+print(data)
