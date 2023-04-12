@@ -1,5 +1,5 @@
 import csv
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect ,get_object_or_404
 import pandas as pd
 from .models import product_category_name_translation
 from .forms import TraductionForm
@@ -28,21 +28,26 @@ def home(request):
 @csrf_exempt
 
 def test(request):
-    afficher = False
+    form = []
     if request.method == 'POST':
-        form = TraductionForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('test')
+        if 'afficher' in request.POST:
+            donnees = product_category_name_translation.objects.all()
+            afficher = True
+        elif 'supprimer' in request.POST:
+            traduction_id = request.POST.get('traduction_id')
+            traduction = get_object_or_404(product_category_name_translation, product_category_name=traduction_id)
+            traduction.delete()
+            donnees = product_category_name_translation.objects.all()
+            afficher = True
+        else:
+            form = TraductionForm(request.POST)
+            if form.is_valid():
+                form.save()
+            donnees = []
+            afficher = False
     else:
         form = TraductionForm()
-
-    donnees = []
-    afficher = False
-    if 'afficher' in request.POST:
-        donnees = product_category_name_translation.objects.all()
-        afficher = True
-    elif 'masquer' in request.POST:
+        donnees = []
         afficher = False
 
     context = {'form': form, 'donnees': donnees, 'afficher': afficher}

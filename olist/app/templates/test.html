@@ -22,18 +22,28 @@
           <th>Titre original</th>
           <th>Titre anglais</th>
           <th>Titre français</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for traduction in donnees %}
+        <input type="hidden" name="traduction_id" value="{{ traduction.pk }}">
+
           <tr>
             <td>{{ traduction.product_category_name }}</td>
             <td>{{ traduction.product_category_name_english }}</td>
             <td>{{ traduction.product_category_name_french }}</td>
+            <td>
+              <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="traduction_id" value="{{ traduction.product_category_name }}">
+                <button type="submit" name="supprimer">Supprimer</button>
+              </form>
+            </td>
           </tr>
         {% empty %}
           <tr>
-            <td colspan="3">Aucune traduction enregistrée</td>
+            <td colspan="4">Aucune traduction enregistrée</td>
           </tr>
         {% endfor %}
       </tbody>
