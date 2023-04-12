@@ -1,6 +1,51 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <style>
+
+
+      html, body {
+      min-height: 100%;
+      }
+      body, div, form, input, select, textarea, label, nav, li, a { 
+      padding: 0;
+      margin: 0;
+      outline: none;
+      font-family: Roboto, Arial, sans-serif;
+      font-size: 14px;
+      color: #666;
+      line-height: 22px;
+      }
+      form {
+      width: 100%;
+      padding: 20px;
+      border-radius: 6px;
+      background: #fff;
+      box-shadow: 0 0 8px #006622; 
+      }
+      input {
+      width: calc(100% - 10px);
+      padding: 5px;
+      }
+      input[type=radio], input[type=checkbox]  {
+      display: none;
+      }
+      button ,nav , a {
+      width: 150px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px; 
+      background:  #1c87c9;
+      font-size: 16px;
+      color: #fff;
+      cursor: pointer;
+      }
+      button:hover, nav, li, a  {
+      background:  #0692e8;
+      }
+    </style>
     <title>{% block title %}Mon site web{% endblock %}</title>
     {% block meta %}
     <meta charset="utf-8">
