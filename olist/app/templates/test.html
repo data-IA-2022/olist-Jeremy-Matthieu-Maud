@@ -2,36 +2,41 @@
 
 {% block content %}
   <h1>Ajouter une traduction</h1>
-  <form method="POST" action="{% url 'ajouter_traduction' %}">
+  <form method="POST">
     {% csrf_token %}
     {{ form.as_p }}
     <button type="submit">Enregistrer</button>
   </form>
-{% endblock %}
 
-
-{% block content %}
   <h1>Traductions</h1>
-  <form method="POST" action="{% url 'test' %}">
+  <form method="POST">
     {% csrf_token %}
-    <button type="submit">Afficher tout</button>
-  </form>
-  <table>
-    <thead>
-      <tr>
-        <th>Titre original</th>
-        <th>Titre anglais</th>
-        <th>Titre français</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for traduction in donnees %}
+    {% if afficher %}
+      <button type="submit" name="masquer">Masquer</button>
+    {% else %}
+      <button type="submit" name="afficher">Afficher tout</button>
+    {% endif %}
+    <table {% if not afficher %}style="display: none;"{% endif %}>
+      <thead>
         <tr>
-          <td>{{ traduction.product_category_name }}</td>
-          <td>{{ traduction.product_category_name_english }}</td>
-          <td>{{ traduction.product_category_name_french }}</td>
+          <th>Titre original</th>
+          <th>Titre anglais</th>
+          <th>Titre français</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %} 
+      </thead>
+      <tbody>
+        {% for traduction in donnees %}
+          <tr>
+            <td>{{ traduction.product_category_name }}</td>
+            <td>{{ traduction.product_category_name_english }}</td>
+            <td>{{ traduction.product_category_name_french }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">Aucune traduction enregistrée</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+{% endblock %}
