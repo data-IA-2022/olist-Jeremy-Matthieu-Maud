@@ -4,6 +4,7 @@ import pandas as pd
 from .models import product_category_name_translation
 from .forms import TraductionForm
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.views import APIView
 
 def ajouter_traduction(request):
     if request.method == 'POST':
@@ -53,3 +54,25 @@ def test(request):
     context = {'form': form, 'donnees': donnees, 'afficher': afficher}
     return render(request, 'test.html', context)
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions
+from django.contrib.auth.models import User
+from django.http import JsonResponse
+
+class Traduction(APIView):
+    """
+    View to list all users in the system.
+
+    * Requires token authentication.
+    * Only admin users are able to access this view.
+    """
+    """ authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]
+    """
+    def get(self, request, format=None):
+        """
+        Return a list of all users.
+        """
+        traductions = list(product_category_name_translation.objects.all().values())
+        return JsonResponse(traductions, safe=False)
