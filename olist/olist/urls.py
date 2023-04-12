@@ -16,11 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from app.views import home
-
+from app.views import test ,ajouter_traduction
 
 
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", home , name="home"),
+    path("test/", test , name="test"),
+    path('ajouter/', ajouter_traduction, name='ajouter_traduction'),
 ]
