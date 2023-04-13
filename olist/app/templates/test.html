@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Ajouter une traduction</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Enregistrer</button>
+  </form>
+
+  <h1>Traductions</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {% if afficher %}
+      <button type="submit" name="masquer">Masquer</button>
+    {% else %}
+      <button type="submit" name="afficher">Afficher tout</button>
+    {% endif %}
+    <table {% if not afficher %}style="display: none;"{% endif %}>
+      <thead>
+        <tr>
+          <th>Titre original</th>
+          <th>Titre anglais</th>
+          <th>Titre français</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for traduction in donnees %}
+        <input type="hidden" name="traduction_id" value="{{ traduction.pk }}">
+
+          <tr>
+            <td>{{ traduction.product_category_name }}</td>
+            <td>{{ traduction.product_category_name_english }}</td>
+            <td>{{ traduction.product_category_name_french }}</td>
+            <td>
+              <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="traduction_id" value="{{ traduction.product_category_name }}">
+                <button type="submit" name="supprimer">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="4">Aucune traduction enregistrée</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+{% endblock %}
