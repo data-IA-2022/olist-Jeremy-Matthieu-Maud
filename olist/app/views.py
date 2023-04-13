@@ -1,23 +1,46 @@
 import csv
-from django.shortcuts import render, redirect ,get_object_or_404
 import pandas as pd
-from .models import product_category_name_translation
-from .forms import TraductionForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import authentication, permissions, status
+from .models import product_category_name_translation, TraductionSerializer
+from .forms import TraductionForm
+
+
+
+import requests
 
 def ajouter_traduction(request):
     if request.method == 'POST':
         form = TraductionForm(request.POST)
         if form.is_valid():
-            # Créer une nouvelle instance du modèle à partir des données du formulaire
-            traduction = form.save(commit=False)
-            traduction.save()
-            # Rediriger vers la page de succès
-            return redirect('succes')
+            # Récupérer les données du formulaire
+            product_category_name = form.cleaned_data['product_category_name']
+            product_category_name_english = form.cleaned_data['product_category_name_english']
+            product_category_name_french = form.cleaned_data['product_category_name_french']
+
+            # Envoyer une requête POST à l'API pour enregistrer la traduction
+            data = {
+                'product_category_name': product_category_name,
+                'product_category_name_english': product_category_name_english,
+                'product_category_name_french': product_category_name_french,
+            }
+            response = requests.post('http://localhost:8000/trad/', data=data)
+
+            # Vérifier la réponse de l'API
+            if response.status_code == 201:
+                # Rediriger vers la page de succès
+                return redirect('succes')
+            else:
+                form.add_error(None, 'Une erreur est survenue lors de l\'enregistrement de la traduction.')
     else:
         form = TraductionForm()
     return render(request, 'ajouter_traduction.html', {'form': form})
+
+
 
 def home(request):
     data = pd.read_csv("/home/matthieu/Formation_IA/Briefs/olist-Jeremy-Matthieu-Maud/archive/product_category_name_translation.csv")
@@ -25,11 +48,9 @@ def home(request):
     return render(request, 'home.html', {'data': data_dict})
 
 
-
 @csrf_exempt
-
 def test(request):
-    form = []
+    form = TraductionForm()
     if request.method == 'POST':
         if 'afficher' in request.POST:
             donnees = product_category_name_translation.objects.all()
@@ -54,25 +75,42 @@ def test(request):
     context = {'form': form, 'donnees': donnees, 'afficher': afficher}
     return render(request, 'test.html', context)
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import authentication, permissions
-from django.contrib.auth.models import User
-from django.http import JsonResponse
 
 class Traduction(APIView):
     """
-    View to list all users in the system.
+    API endpoint that allows Traductions to be viewed or edited.
+    """
+    """authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAdminUser]"""
 
-    * Requires token authentication.
-    * Only admin users are able to access this view.
-    """
-    """ authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAdminUser]
-    """
     def get(self, request, format=None):
-        """
-        Return a list of all users.
-        """
-        traductions = list(product_category_name_translation.objects.all().values())
-        return JsonResponse(traductions, safe=False)
+        traductions = product_category_name_translation.objects.all()
+        serializer = TraductionSerializer(traductions, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TraductionSerializer(data=request.data)
+        if serializer.is_valid():
+            product_category_name = serializer.validated_data.get('product_category_name')
+            product_category_name_english = serializer.validated_data.get('product_category_name_english')
+            product_category_name_french = serializer.validated_data.get('product_category_name_french')
+
+            traduction = product_category_name_translation(
+                product_category_name=product_category_name,
+                product_category_name_english=product_category_name_english,
+                product_category_name_french=product_category_name_french
+            )
+
+            traduction.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+    def delete(self, request, format=None):
+        product_category_name = request.data.get('product_category_name')
+        traduction = product_category_name_translation.objects.filter(product_category_name=product_category_name)
+        if traduction:
+            traduction.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
